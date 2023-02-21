@@ -1,25 +1,33 @@
-@font-face  {
-  font-family: 'oxygen';
-  src: url('./../fonts/oxygen/oxygen-regular-webfont.eot');
-  src: url('./../fonts/oxygen/oxygen-regular-webfont.eot?#iefix') format('embedded-opentype'),
-    url('./../fonts/oxygen/oxygen-regular-webfont.woff2') format('woff2'),
-    url('./../fonts/oxygen/oxygen-regular-webfont.woff') format('woff'),
-    url('./../fonts/oxygen/oxygen-regular-webfont.ttf') format('truetype'),
-    url('./../fonts/oxygen/oxygen-regular-webfont.svg#oxygen') format('svg');
-  font-weight: normal;
-  font-style: normal;
+@font-face
+{
+    font-family: 'oxygen';
+    src: url('./../fonts/oxygen/oxygen-regular-webfont.eot');
+    src: url('./../fonts/oxygen/oxygen-regular-webfont.eot?#iefix') format('embedded-opentype'),
+        url('./../fonts/oxygen/oxygen-regular-webfont.woff2') format('woff2'),
+        url('./../fonts/oxygen/oxygen-regular-webfont.woff') format('woff'),
+        url('./../fonts/oxygen/oxygen-regular-webfont.ttf') format('truetype'),
+        url('./../fonts/oxygen/oxygen-regular-webfont.svg#oxygen') format('svg');
+    font-weight: 400;
+    font-style: normal;
 }
-@font-face  {
-  font-family: 'lora';
-  src: url('./../fonts/lora/lora-variablefont_wght-webfont.eot');
-  src: url('./../fonts/lora/lora-regular-webfont.eot?#iefix') format('embedded-opentype'),
-    url('./../fonts/lora/lora-regular-webfont.woff2') format('woff2'),
-    url('./../fonts/lora/lora-regular-webfont.woff') format('woff'),
-    url('./../fonts/lora/lora-regular-webfont.ttf') format('truetype'),
-    url('./../fonts/lora/lora-regular-webfont.svg#lora') format('svg');
-  font-weight: normal;
-  font-style: normal;
+
+@font-face
+{
+    font-family: 'lora';
+    src: url('./../fonts/lora/lora-variablefont_wght-webfont.eot');
+    src: url('./../fonts/lora/lora-regular-webfont.eot?#iefix') format('embedded-opentype'),
+        url('./../fonts/lora/lora-regular-webfont.woff2') format('woff2'),
+        url('./../fonts/lora/lora-regular-webfont.woff') format('woff'),
+        url('./../fonts/lora/lora-regular-webfont.ttf') format('truetype'),
+        url('./../fonts/lora/lora-regular-webfont.svg#lora') format('svg');
+    font-weight: 400;
+    font-style: normal;
 }
-body  {
-  background-color: #F7F7F7;
+
+body
+{
+    background-color: #F7F7F7;
+    font-family: 'oxygen';
+    font-style: normal;
+    font-weight: 400;
 }
