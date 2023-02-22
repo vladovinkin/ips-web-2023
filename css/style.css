@@ -145,4 +145,34 @@ body
     background: #dd621b;
 }
 
+.themes-menu-wrap
+{
+    display: flex;
+    justify-content: center;
+    background: #FFFFFF;
+}
 
+.themes-menu
+{
+    width: 960px;
+    display: flex;
+    justify-content: space-around;
+}
+
+.themes-menu-item
+{
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.themes-menu-link
+{
+    text-decoration: none;
+    font-family: 'Lora';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    text-align: center;
+    color: #768088;
+}
