@@ -14,7 +14,7 @@
 @font-face
 {
     font-family: 'lora';
-    src: url('./../fonts/lora/lora-variablefont_wght-webfont.eot');
+    src: url('./../fonts/lora/lora-regular-webfont.eot');
     src: url('./../fonts/lora/lora-regular-webfont.eot?#iefix') format('embedded-opentype'),
         url('./../fonts/lora/lora-regular-webfont.woff2') format('woff2'),
         url('./../fonts/lora/lora-regular-webfont.woff') format('woff'),
@@ -31,3 +31,118 @@ body
     font-style: normal;
     font-weight: 400;
 }
+
+.container-wrap
+{
+    display: flex;
+    justify-content: center;
+}
+
+.container
+{
+    width: 1440px;
+}
+
+.top-background
+{
+    height: 500px;
+    background: url(./../img/bg-header-01.png) no-repeat;
+    border-radius: 0px;
+}
+
+.header
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 123px;
+}
+
+.header-logo
+{
+    font-family: 'lora';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 26px;
+    line-height: 26px;
+    color: #FFFFFF;
+    margin: 20px 0 20px 250px;
+}
+
+.header-menu
+{
+    display: flex;
+    margin: 27px 270px 27px 0;
+    list-style-type: none;
+    padding: 0;
+}
+
+.header-menu-item {
+    margin-right: 40px;
+} 
+
+.header-menu-item:last-child 
+{
+    margin-right: 0;    
+}
+
+.menu-item-link
+{
+    font-size: 12px;
+    line-height: 20px;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    color: #FFFFFF;
+    text-decoration: none;
+}
+
+.main-title-block
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.main-title
+{
+    font-family: 'lora';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 50px;
+    line-height: 51px;
+    text-align: center;
+    letter-spacing: 2px;
+    color: #FFFFFF;
+    margin: 0 0 20px 0;
+}
+
+.main-subtitle
+{
+    font-size: 17px;
+    line-height: 20px;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.63);
+    margin-bottom: 31px;
+}
+
+.button
+{
+    display: inline-block;
+    background: #DD783F;
+    border-radius: 3px;
+    padding: 12px 31px;
+    font-size: 13px;
+    line-height: 20px;
+    align-self: center;
+    color: #FFFFFF;
+    text-decoration: none;
+    transition: all .3s ease-in-out;
+}
+
+.button:hover
+{
+    background: #dd621b;
+}
+
+
