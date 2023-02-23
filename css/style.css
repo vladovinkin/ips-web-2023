@@ -26,10 +26,23 @@
 
 body
 {
-    background-color: #F7F7F7;
+    margin: 0;
+    padding: 0;
+    background-color: #F5F5F5;
     font-family: 'oxygen';
     font-style: normal;
     font-weight: 400;
+}
+
+a
+{
+    text-decoration: none;
+}
+
+ul
+{
+    list-style-type: none;
+    padding: 0;
 }
 
 .container-wrap
@@ -40,6 +53,7 @@ body
 
 .container
 {
+    background-color: #F7F7F7;
     width: 1440px;
 }
 
@@ -47,6 +61,7 @@ body
 {
     height: 500px;
     background: url(./../img/bg-header-01.png) no-repeat;
+    background-color: #000000;
     border-radius: 0px;
 }
 
@@ -126,21 +141,25 @@ body
     margin-bottom: 31px;
 }
 
-.button
+.main-title-block__button
 {
     display: inline-block;
-    background: #DD783F;
     border-radius: 3px;
     padding: 12px 31px;
     font-size: 13px;
     line-height: 20px;
     align-self: center;
-    color: #FFFFFF;
-    text-decoration: none;
-    transition: all .3s ease-in-out;
 }
 
-.button:hover
+.button_orange
+{
+    color: #FFFFFF;
+    background: #DD783F;
+    transition: all .3s ease-in-out;
+    text-decoration: none;
+}
+
+.button_orange:hover
 {
     background: #dd621b;
 }
@@ -150,6 +169,7 @@ body
     display: flex;
     justify-content: center;
     background: #FFFFFF;
+    margin-bottom: 60px;
 }
 
 .themes-menu
@@ -168,7 +188,7 @@ body
 .themes-menu-link
 {
     text-decoration: none;
-    font-family: 'Lora';
+    font-family: 'lora';
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
@@ -176,3 +196,169 @@ body
     text-align: center;
     color: #768088;
 }
+
+.section-block
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.featured {
+    margin-bottom: 67px;
+}
+
+.section-title
+{
+    font-size: 20px;
+    font-weight: normal;
+    line-height: 27px;
+    text-align: center;
+    letter-spacing: 2px;
+    color: #2E2E2E;
+    margin: 0 0 23px;
+    padding: 0 13px 16px;
+    border-bottom: 1px solid #DEDEDE;
+}
+
+.featured__posts
+{
+    display: flex;
+}
+
+.featured-post
+{
+    margin-right: 20px;
+    border-radius: 3px;
+    width: 460px;
+    height: 280px;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    position: relative;
+}
+
+.featured-post:last-child
+{
+    margin-right: 0;
+}
+
+
+.background1
+{
+    background: url(./../img/featured-01.png) no-repeat center;
+}
+
+.background2
+{
+    background: url(./../img/featured-02.png) no-repeat center;
+}
+
+.background1,
+.background2
+{
+    background-size: 460px 280px;
+    -webkit-transition: background-size .5s ease;
+    transition: background-size .5s ease;
+}
+
+.background1:hover,
+.background2:hover
+{
+    background-size: 110% 110%;
+}
+
+.featured__tag-button
+{
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    border-radius: 2px;
+    font-size: 12px;
+    line-height: 13px;
+    text-transform: uppercase;
+    padding: 6px 9px 7px;
+}
+
+.post-inner
+{
+    padding: 20px;
+}
+
+.post-inner-with-tag
+{
+    height: 100%;
+    display: flex;
+}
+
+.post-inner_align-end
+{
+    width: 100%;
+    align-self: end;
+}
+
+.featured-post__title
+{
+    font-family: 'lora';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 27px;
+    line-height: 30px;
+    color: #FFFFFF;
+    text-decoration: none;
+    margin: 0 0 6px;
+}
+
+.featured-post__subtitle
+{
+    font-size: 14px;
+    line-height: 25px;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 12px;
+}
+
+.featured-post__signature
+{
+    display: flex;
+    justify-content: space-between;
+}
+
+.signature-author
+{
+    display: flex;
+    align-items: center;
+}
+
+.signature-author__photo
+{
+    width: 26px;
+    height: 26px;
+    border-radius: 50px;
+    background-color: #FFFFFF;
+    margin-right: 10px;
+}
+
+.author-mat-vogels
+{
+    background: url(./../img/photo-Mat-Vogels.png);
+}
+
+.author-william-wong
+{
+    background: url(./../img/photo-William-Wong.png);
+}
+
+.signature-author__name
+{
+    font-size: 11px;
+    line-height: 35px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.signature-date
+{
+    font-size: 12px;
+    line-height: 35px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
