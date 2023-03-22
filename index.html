@@ -10,18 +10,20 @@
 <body>
   <div class="container-wrap">
     <div class="container">
-      <div class="top-background">
-        <header class="header header-main">
-          <a href="/" class="logo main-page-logo" title="Main page">Escape.</a>
+      <div class="top-banner">
+
+        <header class="header top-banner__header">
+          <a href="/" class="logo logo_theme_dark" title="Main page">Escape.</a>
           <nav>
-              <ul class="menu">
-                  <li class="header-menu-item"><a href="/" class="menu-item-link main-header-item-link" title="Home">Home</a></li>
-                  <li class="header-menu-item"><a href="#" class="menu-item-link main-header-item-link" title="Categories">Categories</a></li>
-                  <li class="header-menu-item"><a href="#" class="menu-item-link main-header-item-link" title="About">About</a></li>
-                  <li class="header-menu-item"><a href="#" class="menu-item-link main-header-item-link" title="Contact">Contact</a></li>
+              <ul class="menu header__menu">
+                  <li class="menu-item menu-item_width_wide"><a href="/" class="menu-item__link menu-item__link_theme_dark" title="Home">Home</a></li>
+                  <li class="menu-item menu-item_width_wide"><a href="#" class="menu-item__link menu-item__link_theme_dark" title="Categories">Categories</a></li>
+                  <li class="menu-item menu-item_width_wide"><a href="#" class="menu-item__link menu-item__link_theme_dark" title="About">About</a></li>
+                  <li class="menu-item menu-item_width_wide"><a href="#" class="menu-item__link menu-item__link_theme_dark" title="Contact">Contact</a></li>
               </ul>
           </nav>
         </header>
+
         <div class="main-title-block">
           <h1 class="main-title">Let's do it together.</h1>
           <div class="main-subtitle">We travel the world in search of stories. Come along for the ride.</div>
@@ -189,17 +191,26 @@
           </div>
         </div>
       </section>
-      <footer class="footer">
-        <a href="/" class="logo main-page-logo" title="Main page">Escape.</a>
-        <nav>
-            <ul class="menu footer-menu">
-              <li class="footer-menu-item"><a href="/" class="menu-item-link footer-menu-link" title="Home">Home</a></li>
-              <li class="footer-menu-item"><a href="#" class="menu-item-link footer-menu-link" title="Categories">Categories</a></li>
-              <li class="footer-menu-item"><a href="#" class="menu-item-link footer-menu-link" title="About">About</a></li>
-              <li class="footer-menu-item"><a href="#" class="menu-item-link footer-menu-link" title="Contact">Contact</a></li>
-            </ul>
-        </nav>
-      </footer>
+      <div class="bottom-banner">
+        <div class="subcsribe-form bottom-banner__form">
+          <h2 class="section-title subscribe-form__title">Stay in Touch</h2>
+          <div class="subscribe-form__inputs">
+            <input type="email" class="subscribe-form__email" name="email" placeholder="Enter your email address"/ >
+            <input type="submit" class="subscribe-form__button" title="Send email" value="Submit" />
+          </div>
+        </div>
+        <footer class="footer">
+          <a href="/" class="logo logo_theme_dark" title="Main page">Escape.</a>
+          <nav>
+              <ul class="menu footer-menu">
+                <li class="menu-item menu-item_width_narrow"><a href="/" class="menu-item__link menu-item__link_theme_opaque" title="Home">Home</a></li>
+                <li class="menu-item menu-item_width_narrow"><a href="#" class="menu-item__link menu-item__link_theme_opaque" title="Categories">Categories</a></li>
+                <li class="menu-item menu-item_width_narrow"><a href="#" class="menu-item__link menu-item__link_theme_opaque" title="About">About</a></li>
+                <li class="menu-item menu-item_width_narrow"><a href="#" class="menu-item__link menu-item__link_theme_opaque" title="Contact">Contact</a></li>
+              </ul>
+          </nav>
+        </footer>
+      </div>
     </div>
   </div>
 </body>
