@@ -36,9 +36,12 @@
     font-style: normal;
 }
 
-body
+*
 {
     margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    outline: none;
 }
 
 .container-wrap
@@ -580,7 +583,8 @@ body
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    min-height: 378px;
+    max-height: 378px;
+    overflow: hidden;
     background: url(./../img/bg-bottom-01.jpg) no-repeat;
     background-color: #000000;
     border-radius: 0px;
@@ -646,7 +650,7 @@ body
     width: -webkit-fill-available;
     justify-content: space-between;
     align-items: center;
-    padding: 15px 250px 16px;
+    padding: 31px 250px 32px;
     position: relative;
 }
 
