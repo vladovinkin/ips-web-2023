@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="static/css/style.css">
+  <title>{{ .ResourceName }} {{ .Title }}</title>
+</head>
+<body>
+  <div class="container-wrap">
+    <div class="container">
+      <header class="header top-banner__header">
+        <a href="/home" class="logo article-header-logo" title="Main page">{{ .ResourceName }}</a>
+        <nav>
+          <ul class="menu">
+            <li class="menu-item menu-item_width_wide">
+              <a href="/home" class="menu-item__link menu-item__link_theme_light" title="Home">Home</a>
+            </li>
+            <li class="menu-item menu-item_width_wide">
+              <a href="#" class="menu-item__link menu-item__link_theme_light" title="Categories">Categories</a>
+            </li>
+            <li class="menu-item menu-item_width_wide">
+              <a href="#" class="menu-item__link menu-item__link_theme_light" title="About">About</a>
+            </li>
+            <li class="menu-item menu-item_width_wide">
+              <a href="#" class="menu-item__link menu-item__link_theme_light" title="Contact">Contact</a>
+            </li>
+          </ul>
+        </nav>
+      </header>
+      <article>
+        <div class="article-title-block">
+          <h1 class="article-title">{{ .Title }}</h1>
+          <span class="article-subtitle">{{ .Subtitle }}</span>
+        </div>
+        <div class="{{ .ImgModifier }}"></div>
+        <div class="article-text">
+          {{ range $key, $value := .Texts }}
+            <p class="article-text__content">{{ $value }}</p>
+          {{ end }}
+        </div>
+      </article>
+      <div class="bottom-banner">
+        <form class="subcsribe-form bottom-banner__form" action="#">
+          <h2 class="section-title subscribe-form__title">{{ .TitleSubscribe }}</h2>
+          <div class="subscribe-form__inputs">
+            <input type="email" class="subscribe-form__email" name="email" placeholder="Enter your email address">
+            <input type="submit" class="subscribe-form__button" title="Send email" value="Submit">
+          </div>
+        </form>
+        <footer class="footer">
+          <a href="/home" class="logo logo_theme_dark" title="Main page">{{ .ResourceName }}</a>
+          <nav>
+            <ul class="menu footer-menu">
+              <li class="menu-item menu-item_width_narrow">
+                <a href="/home" class="menu-item__link menu-item__link_theme_opaque" title="Home">Home</a>
+              </li>
+              <li class="menu-item menu-item_width_narrow">
+                <a href="#" class="menu-item__link menu-item__link_theme_opaque" title="Categories">Categories</a>
+              </li>
+              <li class="menu-item menu-item_width_narrow">
+                <a href="#" class="menu-item__link menu-item__link_theme_opaque" title="About">About</a>
+              </li>
+              <li class="menu-item menu-item_width_narrow">
+                <a href="#" class="menu-item__link menu-item__link_theme_opaque" title="Contact">Contact</a>
+              </li>
+            </ul>
+          </nav>
+        </footer>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

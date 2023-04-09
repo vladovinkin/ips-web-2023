@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="static/css/style.css">
+  <title>{{ .ResourceName }} {{ .Title }}</title>
+</head>
+<body>
+  <div class="container-wrap">
+    <div class="container">
+      <div class="top-banner">
+        <header class="header top-banner__header">
+          <a href="/home" class="logo logo_theme_dark" title="Main page">{{ .ResourceName }}</a>
+          <nav>
+            <ul class="menu header__menu">
+              <li class="menu-item menu-item_width_wide">
+                <a href="/home" class="menu-item__link menu-item__link_theme_dark" title="Home">Home</a>
+              </li>
+              <li class="menu-item menu-item_width_wide">
+                <a href="#" class="menu-item__link menu-item__link_theme_dark" title="Categories">Categories</a>
+              </li>
+              <li class="menu-item menu-item_width_wide">
+                <a href="#" class="menu-item__link menu-item__link_theme_dark" title="About">About</a>
+              </li>
+              <li class="menu-item menu-item_width_wide">
+                <a href="#" class="menu-item__link menu-item__link_theme_dark" title="Contact">Contact</a>
+              </li>
+            </ul>
+          </nav>
+        </header>
+        <div class="main-title-block top-banner__title-block">
+          <h1 class="main-title main-title-block__title">{{ .Title }}</h1>
+          <div class="main-subtitle main-title-block__subtitle">{{ .Subtitle }}</div>
+          <a href="#" class="main-title-block__button button_orange" title="View Latest Posts">View Latest Posts</a>
+        </div>
+      </div>
+      <nav class="themes-menu-wrap">
+        <ul class="themes-menu themes-menu-wrap__content">
+          <li class="themes-menu__item"><a href="#" class="themes-menu__link" title="Nature">Nature</a></li>
+          <li class="themes-menu__item"><a href="#" class="themes-menu__link" title="Photography">Photography</a></li>
+          <li class="themes-menu__item"><a href="#" class="themes-menu__link" title="Relaxation">Relaxation</a></li>
+          <li class="themes-menu__item"><a href="#" class="themes-menu__link" title="Vacation">Vacation</a></li>
+          <li class="themes-menu__item"><a href="#" class="themes-menu__link" title="Travel">Travel</a></li>
+          <li class="themes-menu__item"><a href="#" class="themes-menu__link" title="Adventure">Adventure</a></li>
+        </ul>
+      </nav>
+      <section>
+        <div class="section-block featured">
+          <h2 class="section-title">{{ .TitleFeatured }}</h2>
+          <div class="featured-posts">
+            {{ range .FeaturedPosts }}
+              <div class="featured-posts__item featured-post {{ .ImgModifier }}">
+                <div class="post-inner featured-post__inner">
+                  <a href="{{ .Url }}" class="featured-post__title" title="{{ .Title }}">{{ .Title }}</a>
+                  <div class="featured-post__subtitle">{{ .Subtitle }}</div>
+                  <div class="featured-post__signature post-signature">
+                    <div class="post-signature__author signature-author">
+                      <a href="#" class="signature-author__photo {{ .AuthorImgMod }}" title="Author {{ .Author }}"></a>
+                      <a href="#" class="signature-author__name signature-author__name_light" title="Author {{ .Author }}">{{ .Author }}</a>
+                    </div>
+                    <div class="post-signature__date">{{ .PublishDate }}</div>
+                  </div>
+                </div>
+                {{ if .FeaturedTag }}
+                  <a href="#" class="featured-post__tag-button button_orange" title="tag: {{ .FeaturedTag }}">{{ .FeaturedTag }}</a>
+                {{ end }}
+              </div>
+            {{ end }}
+          </div>
+        </div>
+        <div class="section-block most-recent">
+          <h2 class="section-title">{{ .TitleMR }}</h2>
+          <div class="most-recent-blogs">
+            {{ range .MostRecentPosts }}
+              <div class="most-recent-data most-recent-blogs__item">
+                <div>
+                  <div class="most-recent-data__picture {{ .ImgModifier }}"></div>
+                  <div class="most-recent-content most-recent-data__content">
+                    <a href="{{ .Url }}" class="most-recent-content__title" title="{{ .Title }}">{{ .Title }}</a>
+                    <span class="most-recent-content__description">{{ .Subtitle }}</span>
+                  </div>
+                </div>
+                <div class="most-recent-data__signature data-signature">
+                  <div class="data-signature__author signature-author">
+                    <a href="#" class="signature-author__photo {{ .AuthorImgMod }}" title="Author {{ .Author }}"></a>
+                    <a href="#" class="signature-author__name signature-author__name_dark" title="Author {{ .Author }}">{{ .Author }}</a>
+                  </div>
+                  <div class="data-signature__date">{{ .PublishDate }}</div>
+                </div>
+              </div>
+            {{ end }}
+          </div>
+        </div>
+      </section>
+      <div class="bottom-banner">
+        <form class="subcsribe-form bottom-banner__form" action="#">
+          <h2 class="section-title subscribe-form__title">{{ .TitleSubscribe }}</h2>
+          <div class="subscribe-form__inputs">
+            <input type="email" class="subscribe-form__email" name="email" placeholder="Enter your email address">
+            <input type="submit" class="subscribe-form__button" title="Send email" value="Submit">
+          </div>
+        </form>
+        <footer class="footer">
+          <a href="/home" class="logo logo_theme_dark" title="Main page">{{ .ResourceName }}</a>
+          <nav>
+            <ul class="menu footer-menu">
+              <li class="menu-item menu-item_width_narrow">
+                <a href="/home" class="menu-item__link menu-item__link_theme_opaque" title="Home">Home</a>
+              </li>
+              <li class="menu-item menu-item_width_narrow">
+                <a href="#" class="menu-item__link menu-item__link_theme_opaque" title="Categories">Categories</a>
+              </li>
+              <li class="menu-item menu-item_width_narrow">
+                <a href="#" class="menu-item__link menu-item__link_theme_opaque" title="About">About</a>
+              </li>
+              <li class="menu-item menu-item_width_narrow">
+                <a href="#" class="menu-item__link menu-item__link_theme_opaque" title="Contact">Contact</a>
+              </li>
+            </ul>
+          </nav>
+        </footer>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
