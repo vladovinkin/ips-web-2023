@@ -4,6 +4,14 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"strconv"
+
+	"github.com/jmoiron/sqlx"
+)
+
+const (
+	FEATURED_TRUE  = 1
+	FEATURED_FALSE = 0
 )
 
 type indexPageData struct {
@@ -11,182 +19,141 @@ type indexPageData struct {
 	Title           string
 	Subtitle        string
 	TitleFeatured   string
-	FeaturedPosts   []featuredPostData
+	FeaturedPosts   []postData
 	TitleMR         string
-	MostRecentPosts []mostRecentData
+	MostRecentPosts []postData
 	TitleSubscribe  string
 }
 
-type featuredPostData struct {
-	Title        string
-	Url          string
-	Subtitle     string
-	ImgModifier  string
-	Author       string
-	AuthorImgMod string
-	PublishDate  string
-	FeaturedTag  string
+type postData struct {
+	Id           int    `db:"id"`
+	Title        string `db:"title"`
+	Subtitle     string `db:"subtitle"`
+	Author       string `db:"author"`
+	AuthorImgMod string `db:"author_url"`
+	PublishDate  string `db:"publish_date"`
+	ImgModifier  string `db:"image_url"`
+	Featured     string `db:"featured"`
+	Tag          string `db:"tag"`
 }
-
-type mostRecentData struct {
-	Title        string
-	Url          string
-	Subtitle     string
-	ImgModifier  string
-	Author       string
-	AuthorImgMod string
-	PublishDate  string
-}
-
 type postPageData struct {
 	ResourceName   string
-	Title          string
-	Subtitle       string
-	ImgModifier    string
+	PostRow        postData
 	TitleSubscribe string
 	Texts          []string
 }
 
-func index(w http.ResponseWriter, r *http.Request) { // Функция для отдачи страницы
-	ts, err := template.ParseFiles("pages/index.html") // Главная страница блога
-	if err != nil {
-		http.Error(w, "Internal Server Error", 500) // В случае ошибки парсинга - возвращаем 500
-		log.Println(err.Error())                    // Используем стандартный логгер для вывода ошибки в консоль
-		return                                      // Не забываем завершить выполнение ф-ии
-	}
+func index(db *sqlx.DB) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		postsFeatured, err := getPosts(db, FEATURED_TRUE)
+		if err != nil {
+			http.Error(w, "Internal Server Error", 500)
+			log.Println(err)
+			return
+		}
 
-	// Подготовим данные для шаблона
-	data := indexPageData{
-		ResourceName:    "Escape.",
-		Title:           "Let's do it together.",
-		Subtitle:        "We travel the world in search of stories. Come along for the ride.",
-		TitleFeatured:   "Featured Posts",
-		FeaturedPosts:   featuredPosts(),
-		TitleMR:         "Most Recent",
-		MostRecentPosts: mostRecents(),
-		TitleSubscribe:  "Stay in Touch",
-	}
+		postsMostRecent, err := getPosts(db, FEATURED_FALSE)
+		if err != nil {
+			http.Error(w, "Internal Server Error", 500)
+			log.Println(err)
+			return
+		}
 
-	err = ts.Execute(w, data) // Запускаем шаблонизатор для вывода шаблона в тело ответа
-	if err != nil {
-		http.Error(w, "Internal Server Error", 500)
-		log.Println(err.Error())
-		return
-	}
+		ts, err := template.ParseFiles("pages/index.html")
+		if err != nil {
+			http.Error(w, "Internal Server Error", 500)
+			log.Println(err)
+			return
+		}
 
-	log.Println("index page loaded successfully")
-}
+		data := indexPageData{
+			ResourceName:    "Escape.",
+			Title:           "Let's do it together.",
+			Subtitle:        "We travel the world in search of stories. Come along for the ride.",
+			TitleFeatured:   "Featured Posts",
+			FeaturedPosts:   postsFeatured,
+			TitleMR:         "Most Recent",
+			MostRecentPosts: postsMostRecent,
+			TitleSubscribe:  "Stay in Touch",
+		}
 
-func post(w http.ResponseWriter, r *http.Request) { // Функция для отдачи страницы
-	ts, err := template.ParseFiles("pages/post.html") // Главная страница блога
-	if err != nil {
-		http.Error(w, "Internal Server Error", 500) // В случае ошибки парсинга - возвращаем 500
-		log.Println(err.Error())                    // Используем стандартный логгер для вывода ошибки в консоль
-		return                                      // Не забываем завершить выполнение ф-ии
-	}
+		err = ts.Execute(w, data)
+		if err != nil {
+			http.Error(w, "Internal Server Error", 500)
+			log.Println(err)
+			return
+		}
 
-	// Подготовим данные для шаблона
-	data := postPageData{
-		ResourceName:   "Escape.",
-		Title:          "The Road Ahead",
-		Subtitle:       "We travel the world in search of stories. Come along for the ride.",
-		ImgModifier:    "article-picture",
-		TitleSubscribe: "Stay in Touch",
-		Texts:          postTexts(),
-	}
-
-	err = ts.Execute(w, data) // Запускаем шаблонизатор для вывода шаблона в тело ответа
-	if err != nil {
-		http.Error(w, "Internal Server Error", 500)
-		log.Println(err.Error())
-		return
-	}
-
-	log.Println("post page loaded successfully")
-}
-
-func featuredPosts() []featuredPostData {
-	return []featuredPostData{
-		{
-			Title:        "The Road Ahead",
-			Url:          "/post",
-			Subtitle:     "The road ahead might be paved - it might not be.",
-			ImgModifier:  "background__road-ahead",
-			Author:       "Mat Vogels",
-			AuthorImgMod: "author-mat-vogels",
-			PublishDate:  "September 25, 2015",
-			FeaturedTag:  "",
-		},
-		{
-			Title:        "From Top Down",
-			Url:          "#",
-			Subtitle:     "Once a year, go someplace you’ve never been before.",
-			ImgModifier:  "background__from-top-down",
-			Author:       "William Wong",
-			AuthorImgMod: "author-william-wong",
-			PublishDate:  "September 25, 2015",
-			FeaturedTag:  "Adventure",
-		},
+		log.Println("Request completed successfully")
 	}
 }
 
-func mostRecents() []mostRecentData {
-	return []mostRecentData{
-		{
-			Title:        "Still Standing Tall",
-			Url:          "#",
-			Subtitle:     "Life begins at the end of your comfort zone.",
-			ImgModifier:  "mr-background__still-standing-tall",
-			Author:       "William Wong",
-			AuthorImgMod: "author-william-wong",
-			PublishDate:  "9/25/2015",
-		},
-		{
-			Title:        "Sunny Side Up",
-			Url:          "#",
-			Subtitle:     "No place is ever as bad as they tell you it’s going to be.",
-			ImgModifier:  "mr-background__sunny-side-up",
-			Author:       "Mat Vogels",
-			AuthorImgMod: "author-mat-vogels",
-			PublishDate:  "9/25/2015",
-		},
-		{
-			Title:        "Water Falls",
-			Url:          "#",
-			Subtitle:     "We travel not to escape life, but for life not to escape us.",
-			ImgModifier:  "mr-background__water-falls",
-			Author:       "Mat Vogels",
-			AuthorImgMod: "author-mat-vogels",
-			PublishDate:  "9/25/2015",
-		},
-		{
-			Title:        "Through the Mist",
-			Url:          "#",
-			Subtitle:     "Travel makes you see what a tiny place you occupy in the world.",
-			ImgModifier:  "mr-background__through-the-mist",
-			Author:       "William Wong",
-			AuthorImgMod: "author-william-wong",
-			PublishDate:  "9/25/2015",
-		},
-		{
-			Title:        "Awaken Early",
-			Url:          "#",
-			Subtitle:     "Not all those who wander are lost.",
-			ImgModifier:  "mr-background__awaken-early",
-			Author:       "Mat Vogels",
-			AuthorImgMod: "author-mat-vogels",
-			PublishDate:  "9/25/2015",
-		},
-		{
-			Title:        "Try it Always",
-			Url:          "#",
-			Subtitle:     "The world is a book, and those who do not travel read only one page.",
-			ImgModifier:  "mr-background__try-it-always",
-			Author:       "Mat Vogels",
-			AuthorImgMod: "author-mat-vogels",
-			PublishDate:  "9/25/2015",
-		},
+func post(db *sqlx.DB) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+
+		id, err := strconv.Atoi(r.URL.Query().Get("id"))
+		if err != nil || id < 1 {
+			http.NotFound(w, r)
+			return
+		}
+
+		const query = `
+		SELECT
+			title,
+			subtitle,
+			image_url
+		FROM
+			post
+		WHERE id = ?`
+
+		row := db.QueryRow(query, id)
+
+		var postRow postData
+		row.Scan(&postRow.Title, &postRow.Subtitle, &postRow.ImgModifier)
+
+		ts, err := template.ParseFiles("pages/post.html") // Главная страница блога
+		if err != nil {
+			http.Error(w, "Internal Server Error", 500) // В случае ошибки парсинга - возвращаем 500
+			log.Println(err.Error())                    // Используем стандартный логгер для вывода ошибки в консоль
+			return                                      // Не забываем завершить выполнение ф-ии
+		}
+
+		// Подготовим данные для шаблона
+		data := postPageData{
+			ResourceName:   "Escape.",
+			PostRow:        postRow,
+			TitleSubscribe: "Stay in Touch",
+			Texts:          postTexts(),
+		}
+
+		err = ts.Execute(w, data) // Запускаем шаблонизатор для вывода шаблона в тело ответа
+		if err != nil {
+			http.Error(w, "Internal Server Error", 500)
+			log.Println(err.Error())
+			return
+		}
+
+		log.Println("post page loaded successfully")
 	}
+}
+
+func getPosts(db *sqlx.DB, featured int) ([]postData, error) {
+	const query = `
+		SELECT
+			*
+		FROM
+			post
+		WHERE featured = ?`
+
+	var posts []postData
+
+	err := db.Select(&posts, query, featured)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return posts, nil
 }
 
 func postTexts() []string {

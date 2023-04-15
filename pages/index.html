@@ -51,9 +51,9 @@
           <h2 class="section-title">{{ .TitleFeatured }}</h2>
           <div class="featured-posts">
             {{ range .FeaturedPosts }}
-              <div class="featured-posts__item featured-post {{ .ImgModifier }}">
+              <div class="featured-posts__item featured-post {{ .ImgModifier }}  {{ .ImgModifier }}_scale">
                 <div class="post-inner featured-post__inner">
-                  <a href="{{ .Url }}" class="featured-post__title" title="{{ .Title }}">{{ .Title }}</a>
+                  <a href="/post?id={{ .Id }}" class="featured-post__title" title="{{ .Title }}">{{ .Title }}</a>
                   <div class="featured-post__subtitle">{{ .Subtitle }}</div>
                   <div class="featured-post__signature post-signature">
                     <div class="post-signature__author signature-author">
@@ -63,8 +63,8 @@
                     <div class="post-signature__date">{{ .PublishDate }}</div>
                   </div>
                 </div>
-                {{ if .FeaturedTag }}
-                  <a href="#" class="featured-post__tag-button button_orange" title="tag: {{ .FeaturedTag }}">{{ .FeaturedTag }}</a>
+                {{ if .Tag }}
+                  <a href="#" class="featured-post__tag-button button_orange" title="tag: {{ .Tag }}">{{ .Tag }}</a>
                 {{ end }}
               </div>
             {{ end }}
@@ -78,7 +78,7 @@
                 <div>
                   <div class="most-recent-data__picture {{ .ImgModifier }}"></div>
                   <div class="most-recent-content most-recent-data__content">
-                    <a href="{{ .Url }}" class="most-recent-content__title" title="{{ .Title }}">{{ .Title }}</a>
+                    <a href="/post?id={{ .Id }}" class="most-recent-content__title" title="{{ .Title }}">{{ .Title }}</a>
                     <span class="most-recent-content__description">{{ .Subtitle }}</span>
                   </div>
                 </div>
