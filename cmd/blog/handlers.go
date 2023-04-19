@@ -1,11 +1,15 @@
 package main
 
 import (
+	"database/sql"
+	"fmt"
 	"html/template"
 	"log"
 	"net/http"
-	"strconv"
 
+	// "strconv"
+
+	"github.com/gorilla/mux"
 	"github.com/jmoiron/sqlx"
 )
 
@@ -19,14 +23,15 @@ type indexPageData struct {
 	Title           string
 	Subtitle        string
 	TitleFeatured   string
-	FeaturedPosts   []postData
+	FeaturedPosts   []*postData
 	TitleMR         string
-	MostRecentPosts []postData
+	MostRecentPosts []*postData
 	TitleSubscribe  string
 }
 
 type postData struct {
-	Id           int    `db:"id"`
+	Id           string `db:"id"`
+	Url          string `db:"url"`
 	Title        string `db:"title"`
 	Subtitle     string `db:"subtitle"`
 	Author       string `db:"author"`
@@ -35,6 +40,7 @@ type postData struct {
 	ImgModifier  string `db:"image_url"`
 	Featured     string `db:"featured"`
 	Tag          string `db:"tag"`
+	PostURL      string
 }
 type postPageData struct {
 	ResourceName   string
@@ -91,25 +97,20 @@ func index(db *sqlx.DB) func(w http.ResponseWriter, r *http.Request) {
 func post(db *sqlx.DB) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 
-		id, err := strconv.Atoi(r.URL.Query().Get("id"))
-		if err != nil || id < 1 {
-			http.NotFound(w, r)
+		postURL := mux.Vars(r)["postURL"]
+
+		post, err := postByID(db, postURL)
+		if err != nil {
+			if err == sql.ErrNoRows {
+				http.Error(w, "Post not found", 404)
+				log.Println(err)
+				return
+			}
+
+			http.Error(w, "Internal Server Error", 500)
+			log.Println(err)
 			return
 		}
-
-		const query = `
-		SELECT
-			title,
-			subtitle,
-			image_url
-		FROM
-			post
-		WHERE id = ?`
-
-		row := db.QueryRow(query, id)
-
-		var postRow postData
-		row.Scan(&postRow.Title, &postRow.Subtitle, &postRow.ImgModifier)
 
 		ts, err := template.ParseFiles("pages/post.html") // Главная страница блога
 		if err != nil {
@@ -118,10 +119,9 @@ func post(db *sqlx.DB) func(w http.ResponseWriter, r *http.Request) {
 			return                                      // Не забываем завершить выполнение ф-ии
 		}
 
-		// Подготовим данные для шаблона
 		data := postPageData{
 			ResourceName:   "Escape.",
-			PostRow:        postRow,
+			PostRow:        post,
 			TitleSubscribe: "Stay in Touch",
 			Texts:          postTexts(),
 		}
@@ -137,15 +137,24 @@ func post(db *sqlx.DB) func(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func getPosts(db *sqlx.DB, featured int) ([]postData, error) {
+func getPosts(db *sqlx.DB, featured int) ([]*postData, error) {
 	const query = `
 		SELECT
-			*
+			id,
+			url,
+			title,
+			subtitle,
+			author,
+			author_url,
+			publish_date,
+			image_url,
+			featured,
+			tag
 		FROM
 			post
 		WHERE featured = ?`
 
-	var posts []postData
+	var posts []*postData
 
 	err := db.Select(&posts, query, featured)
 
@@ -153,7 +162,34 @@ func getPosts(db *sqlx.DB, featured int) ([]postData, error) {
 		return nil, err
 	}
 
+	for _, post := range posts {
+		post.PostURL = "/post/" + post.Url // Формируем исходя из url поста в базе
+	}
+
+	fmt.Println(posts)
+
 	return posts, nil
+}
+
+func postByID(db *sqlx.DB, postURL string) (postData, error) {
+	const query = `
+		SELECT
+			title,
+			subtitle,
+			image_url
+		FROM
+			post
+		WHERE url = ?
+	`
+
+	var post postData
+
+	err := db.Get(&post, query, postURL)
+	if err != nil {
+		return postData{}, err
+	}
+
+	return post, nil
 }
 
 func postTexts() []string {

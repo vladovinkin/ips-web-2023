@@ -6,12 +6,13 @@ import (
 	"log"
 	"net/http"
 
-	_ "github.com/go-sql-driver/mysql" // Импортируем для возможности подключения к MySQL
+	_ "github.com/go-sql-driver/mysql"
+	"github.com/gorilla/mux"
 	"github.com/jmoiron/sqlx"
 )
 
 const (
-	port         = ":3000"
+	port         = ":3001"
 	dbDriverName = "mysql"
 )
 
@@ -23,12 +24,12 @@ func main() {
 
 	dbx := sqlx.NewDb(db, dbDriverName)
 
-	mux := http.NewServeMux()
+	mux := mux.NewRouter()
 	mux.HandleFunc("/home", index(dbx))
-	mux.HandleFunc("/post", post(dbx))
+	mux.HandleFunc("/post/{postURL}", post(dbx))
 
 	// Отдача статического контента из папки static
-	mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
+	mux.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
 
 	fmt.Println("Start server")
 	http.ListenAndServe(port, mux)
@@ -40,7 +41,6 @@ func main() {
 
 func openDB() (*sql.DB, error) {
 
-	// Получаем клиента к БД и ошибку в случае, если не удалось подключиться
 	return sql.Open("mysql", "root:qAz321_mKL@tcp(localhost:3306)/blog?charset=utf8mb4&collation=utf8mb4_unicode_ci&parseTime=true")
 
 }
