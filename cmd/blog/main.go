@@ -12,7 +12,7 @@ import (
 )
 
 const (
-	port         = ":3001"
+	port         = ":3000"
 	dbDriverName = "mysql"
 )
 
@@ -26,6 +26,7 @@ func main() {
 
 	mux := mux.NewRouter()
 	mux.HandleFunc("/home", index(dbx))
+	mux.HandleFunc("/admin", admin(dbx))
 	mux.HandleFunc("/post/{postURL}", post(dbx))
 
 	// Отдача статического контента из папки static

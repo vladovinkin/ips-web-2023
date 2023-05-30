@@ -2,7 +2,7 @@ package main
 
 import (
 	"database/sql"
-	"fmt"
+	// "fmt"
 	"html/template"
 	"log"
 	"net/http"
@@ -43,11 +43,16 @@ type postData struct {
 	Content      string `db:"content"`
 	PostURL      string
 }
+
 type postPageData struct {
 	ResourceName   string
 	PostRow        postData
 	TitleSubscribe string
 	Texts          []string
+}
+type adminPageData struct {
+	ResourceName string
+	Title        string
 }
 
 func index(db *sqlx.DB) func(w http.ResponseWriter, r *http.Request) {
@@ -91,7 +96,7 @@ func index(db *sqlx.DB) func(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		log.Println("Request completed successfully")
+		log.Println("home page completed successfully")
 	}
 }
 
@@ -138,6 +143,31 @@ func post(db *sqlx.DB) func(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func admin(db *sqlx.DB) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		ts, err := template.ParseFiles("pages/admin.html")
+		if err != nil {
+			http.Error(w, "Internal Server Error", 500)
+			log.Println(err.Error())
+			return
+		}
+
+		data := adminPageData{
+			ResourceName: "Escape.",
+			Title:        "Admin page",
+		}
+
+		err = ts.Execute(w, data) // Запускаем шаблонизатор для вывода шаблона в тело ответа
+		if err != nil {
+			http.Error(w, "Internal Server Error", 500)
+			log.Println(err.Error())
+			return
+		}
+
+		log.Println("admin page loaded successfully")
+	}
+}
+
 func getPosts(db *sqlx.DB, featured int) ([]*postData, error) {
 	const query = `
 		SELECT
@@ -166,7 +196,7 @@ func getPosts(db *sqlx.DB, featured int) ([]*postData, error) {
 		post.PostURL = "/post/" + post.Url // Формируем исходя из url поста в базе
 	}
 
-	fmt.Println(posts)
+	// fmt.Println(posts)
 
 	return posts, nil
 }
