@@ -243,7 +243,6 @@ function submitHandler(event) {
     const dateField = document.querySelector('#dateField');
     const contentText = document.querySelector('#contentText');
 
-    console.log('submit pressed!');
     object.title = titleField.value;
     object.description = descrField.value;
     object.author_name = nameField.value;
