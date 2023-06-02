@@ -234,7 +234,13 @@ function removeImageSD() {
     updateImageSDDisplay();
 }
 
-function submitHandler(event) {
+function removeBase64Header(str) {
+    return str 
+        ? str.substring(str.indexOf(',') + 1) 
+        : "";
+}
+
+async function submitHandler(event) {
     event.preventDefault();
 
     const titleField = document.querySelector('#titleField');
@@ -248,7 +254,19 @@ function submitHandler(event) {
     object.author_name = nameField.value;
     object.publish_date = dateField.value;
     object.content = contentText.value;
-  
+
+    object.author_photo = removeBase64Header(object.author_photo);
+    object.image_hd = removeBase64Header(object.image_hd);
+    object.image_sd = removeBase64Header(object.image_sd);
+
     const json = JSON.stringify(object);
-    console.log(json);
+
+    const response = await fetch('post', {
+        method: 'POST',
+        body: json,
+    })
+
+    if (response.ok) {
+        // console.log(json);
+    }
 }

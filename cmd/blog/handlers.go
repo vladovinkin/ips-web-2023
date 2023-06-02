@@ -2,13 +2,20 @@ package main
 
 import (
 	"database/sql"
-	// "fmt"
+	"encoding/base64"
+	"encoding/json"
+
+	//"fmt"
 	"html/template"
+	"io"
 	"log"
 	"net/http"
-	"strings"
-	// "strconv"
+	"os"
 
+	// "strconv"
+	"strings"
+
+	"github.com/google/uuid"
 	"github.com/gorilla/mux"
 	"github.com/jmoiron/sqlx"
 )
@@ -30,18 +37,33 @@ type indexPageData struct {
 }
 
 type postData struct {
-	Id           string `db:"id"`
-	Url          string `db:"url"`
-	Title        string `db:"title"`
-	Subtitle     string `db:"subtitle"`
-	Author       string `db:"author"`
-	AuthorImgMod string `db:"author_url"`
-	PublishDate  string `db:"publish_date"`
-	ImgModifier  string `db:"image_url"`
-	Featured     string `db:"featured"`
-	Tag          string `db:"tag"`
-	Content      string `db:"content"`
-	PostURL      string
+	Id          string `db:"id"`
+	Url         string `db:"url"`
+	Title       string `db:"title"`
+	Subtitle    string `db:"subtitle"`
+	Author      string `db:"author"`
+	AuthorImg   string `db:"image_author"`
+	PublishDate string `db:"publish_date"`
+	Image_hd    string `db:"image_hd"`
+	Image_sd    string `db:"image_sd"`
+	Featured    string `db:"featured"`
+	Tag         string `db:"tag"`
+	Content     string `db:"content"`
+	PostURL     string
+}
+
+type postDataRequest struct {
+	Title             string `json:"title"`
+	Description       string `json:"description"`
+	Author_name       string `json:"author_name"`
+	Publish_date      string `json:"publish_date"`
+	Content           string `json:"content"`
+	Author_photo_name string `json:"author_photo_name"`
+	Author_photo      string `json:"author_photo"`
+	Image_hd_name     string `json:"image_hd_name"`
+	Image_hd          string `json:"image_hd"`
+	Image_sd_name     string `json:"image_sd_name"`
+	Image_sd          string `json:"image_sd"`
 }
 
 type postPageData struct {
@@ -206,7 +228,7 @@ func postByUrl(db *sqlx.DB, postURL string) (postData, error) {
 		SELECT
 			title,
 			subtitle,
-			image_url,
+			image_hd,
 			content
 		FROM
 			post
@@ -221,4 +243,109 @@ func postByUrl(db *sqlx.DB, postURL string) (postData, error) {
 	}
 
 	return post, nil
+}
+
+func createPost(db *sqlx.DB) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		body, err := io.ReadAll(r.Body)
+		if err != nil {
+			http.Error(w, "Internal Server Error", 500)
+			log.Println(err.Error())
+			return
+		}
+
+		var req postDataRequest
+		err = json.Unmarshal(body, &req)
+		if err != nil {
+			http.Error(w, "Internal Server Error", 500)
+			log.Println(err.Error())
+			return
+		}
+
+		if checkEmptyField(req) {
+			http.Error(w, "Internal Server Error", 500)
+			return
+		}
+
+		// log.Println(req)
+
+		err = savePost(db, req)
+		if err != nil {
+			http.Error(w, "Internal Server Error", 500)
+			log.Println(err.Error())
+			return
+		}
+
+		log.Println("new post created successfully")
+	}
+}
+
+func checkEmptyField(data postDataRequest) bool {
+	return (data.Title == "" || data.Description == "" || data.Author_name == "" || data.Publish_date == "" || data.Content == "" || data.Author_photo_name == "" || data.Author_photo == "" || data.Image_hd_name == "" || data.Image_hd == "" || data.Image_sd_name == "" || data.Image_sd == "")
+}
+
+func savePost(db *sqlx.DB, req postDataRequest) error {
+	const query = `
+		INSERT INTO
+			` + "`post`" + `
+		(
+			title,
+			subtitle,
+			author,
+			publish_date,
+			content,
+			image_author,
+			image_hd,
+			image_sd,
+			url
+		)
+		VALUES
+		(
+			?,
+			?,
+			?,
+			?,
+			?,
+			?,
+			?,
+			?,
+			?
+		)
+	`
+	encodeAndSaveImage(req.Author_photo, "static/img/", req.Author_photo_name)
+	encodeAndSaveImage(req.Image_hd, "static/img/", req.Image_hd_name)
+	encodeAndSaveImage(req.Image_sd, "static/img/", req.Image_sd_name)
+
+	_, err := db.Exec(query,
+		req.Title,
+		req.Description,
+		req.Author_name,
+		req.Publish_date,
+		req.Content,
+		"static/img/"+req.Author_photo_name,
+		"static/img/"+req.Image_hd_name,
+		"static/img/"+req.Image_sd_name,
+		uuid.New().String(),
+	)
+	return err
+}
+
+func encodeAndSaveImage(encodedFile string, savePath string, fileName string) error {
+
+	img, err := base64.StdEncoding.DecodeString(encodedFile)
+	if err != nil {
+		return err
+	}
+
+	file, err := os.Create(savePath + fileName)
+	if err != nil {
+		return err
+	}
+
+	_, err = file.Write(img)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
