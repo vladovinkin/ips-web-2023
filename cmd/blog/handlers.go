@@ -44,8 +44,8 @@ type postData struct {
 	Author      string `db:"author"`
 	AuthorImg   string `db:"image_author"`
 	PublishDate string `db:"publish_date"`
-	Image_hd    string `db:"image_hd"`
-	Image_sd    string `db:"image_sd"`
+	ImageHd     string `db:"image_hd"`
+	ImageSd     string `db:"image_sd"`
 	Featured    string `db:"featured"`
 	Tag         string `db:"tag"`
 	Content     string `db:"content"`
@@ -197,9 +197,10 @@ func getPosts(db *sqlx.DB, featured int) ([]*postData, error) {
 			title,
 			subtitle,
 			author,
-			author_url,
+			image_author,
 			publish_date,
-			image_url,
+			image_hd,
+			image_sd,
 			featured,
 			tag
 		FROM

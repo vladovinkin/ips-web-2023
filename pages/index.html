@@ -25,7 +25,7 @@
                 <a href="#" class="menu-item__link menu-item__link_theme_dark" title="About">About</a>
               </li>
               <li class="menu-item menu-item_width_wide">
-                <a href="#" class="menu-item__link menu-item__link_theme_dark" title="Contact">Contact</a>
+                <a href="/admin" class="menu-item__link menu-item__link_theme_dark" title="Contact">Contact</a>
               </li>
             </ul>
           </nav>
@@ -51,13 +51,13 @@
           <h2 class="section-title">{{ .TitleFeatured }}</h2>
           <div class="featured-posts">
             {{ range .FeaturedPosts }}
-              <div class="featured-posts__item featured-post {{ .ImgModifier }}  {{ .ImgModifier }}_scale">
+              <div class="featured-posts__item featured-post" style="background: url(./../../{{ .ImageSd }}) no-repeat center/cover;">
                 <div class="post-inner featured-post__inner">
                   <a href="{{ .PostURL }}" class="featured-post__title" title="{{ .Title }}">{{ .Title }}</a>
                   <div class="featured-post__subtitle">{{ .Subtitle }}</div>
                   <div class="featured-post__signature post-signature">
                     <div class="post-signature__author signature-author">
-                      <a href="#" class="signature-author__photo {{ .AuthorImgMod }}" title="Author {{ .Author }}"></a>
+                      <a href="#" class="signature-author__photo" style="background: url(./../../{{ .AuthorImg }}) no-repeat center/cover;" title="Author {{ .Author }}"></a>
                       <a href="#" class="signature-author__name signature-author__name_light" title="Author {{ .Author }}">{{ .Author }}</a>
                     </div>
                     <div class="post-signature__date">{{ .PublishDate }}</div>
@@ -76,7 +76,7 @@
             {{ range .MostRecentPosts }}
               <div class="most-recent-data most-recent-blogs__item">
                 <div>
-                  <div class="most-recent-data__picture {{ .ImgModifier }}"></div>
+                  <div class="most-recent-data__picture" style="background: url(./../../{{ .ImageSd }}) no-repeat center/cover;"></div>
                   <div class="most-recent-content most-recent-data__content">
                     <a href="{{ .PostURL }}" class="most-recent-content__title" title="{{ .Title }}">{{ .Title }}</a>
                     <span class="most-recent-content__description">{{ .Subtitle }}</span>
@@ -84,7 +84,7 @@
                 </div>
                 <div class="most-recent-data__signature data-signature">
                   <div class="data-signature__author signature-author">
-                    <a href="#" class="signature-author__photo {{ .AuthorImgMod }}" title="Author {{ .Author }}"></a>
+                    <a href="#" class="signature-author__photo" style="background: url(./../../{{ .AuthorImg }}) no-repeat center/cover;" title="Author {{ .Author }}"></a>
                     <a href="#" class="signature-author__name signature-author__name_dark" title="Author {{ .Author }}">{{ .Author }}</a>
                   </div>
                   <div class="data-signature__date">{{ .PublishDate }}</div>
@@ -116,7 +116,7 @@
                 <a href="#" class="menu-item__link menu-item__link_theme_opaque" title="About">About</a>
               </li>
               <li class="menu-item menu-item_width_narrow">
-                <a href="#" class="menu-item__link menu-item__link_theme_opaque" title="Contact">Contact</a>
+                <a href="admin" class="menu-item__link menu-item__link_theme_opaque" title="Contact">Contact</a>
               </li>
             </ul>
           </nav>

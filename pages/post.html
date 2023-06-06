@@ -24,7 +24,7 @@
               <a href="#" class="menu-item__link menu-item__link_theme_light" title="About">About</a>
             </li>
             <li class="menu-item menu-item_width_wide">
-              <a href="#" class="menu-item__link menu-item__link_theme_light" title="Contact">Contact</a>
+              <a href="/admin" class="menu-item__link menu-item__link_theme_light" title="Contact">Contact</a>
             </li>
           </ul>
         </nav>
@@ -34,7 +34,7 @@
           <h1 class="article-title">{{ .PostRow.Title }}</h1>
           <span class="article-subtitle">{{ .PostRow.Subtitle }}</span>
         </div>
-        <div class="article-picture" style="background: url(./../../{{ .PostRow.Image_hd }}) no-repeat center/cover;"></div>
+        <div class="article-picture" style="background: url(./../../{{ .PostRow.ImageHd }}) no-repeat center/cover;"></div>
         <div class="article-text">
           {{ range $key, $value := .Texts }}
             <p class="article-text__content">{{ $value }}</p>
@@ -63,7 +63,7 @@
                 <a href="#" class="menu-item__link menu-item__link_theme_opaque" title="About">About</a>
               </li>
               <li class="menu-item menu-item_width_narrow">
-                <a href="#" class="menu-item__link menu-item__link_theme_opaque" title="Contact">Contact</a>
+                <a href="/admin" class="menu-item__link menu-item__link_theme_opaque" title="Contact">Contact</a>
               </li>
             </ul>
           </nav>
