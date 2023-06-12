@@ -29,7 +29,7 @@ func main() {
 	mux.HandleFunc("/admin", admin(dbx))
 	mux.HandleFunc("/post/{postURL}", post(dbx))
 
-	mux.HandleFunc("/post", createPost(dbx)).Methods(http.MethodPost)
+	mux.HandleFunc("/api/post", createPost(dbx)).Methods(http.MethodPost)
 
 	// Отдача статического контента из папки static
 	mux.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))

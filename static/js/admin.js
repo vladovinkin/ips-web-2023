@@ -39,7 +39,7 @@ window.addEventListener('load', () => {
         () => {
             // convert image file to base64 string
             reader.object_preview.forEach(el => {
-                el.setAttribute('style', 'background: url(' + reader.result + '); background-size: cover;'); 
+                el.setAttribute('style', 'background: url(' + reader.result + ') center; background-size: cover;'); 
             });
             object[reader.object_field_name] = reader.result;
         },
@@ -48,8 +48,20 @@ window.addEventListener('load', () => {
 
     dateField.setAttribute('value', getDateNow());
     dateChangeHandler();
-    
+    bindBlurValidator();  
 })
+
+function bindBlurValidator() {
+    const fields = ['titleField', 'descrField', 'nameField', 'photoField', 
+                    'dateField', 'imageHDInput', 'imageSDInput', 'contentText'];
+
+    fields.forEach((id) => {
+        const field = document.getElementById(id);
+        field.addEventListener('blur', (event) => {
+            checkEmptyField(event.currentTarget.id)
+        })
+    })
+}
 
 function titleChangeHandler() {
     const titleField = document.querySelector('#titleField');
@@ -114,7 +126,7 @@ function getDateNow() {
         + now.getDate();
 }
 
-function updateAvatarDisplay() {
+function updateAvatarDisplay(checkError = true) {
     const avatarInput = document.querySelector('#photoField');
     const avatarPreview = document.querySelector('.column-inputs__photo-preview');
     const btnUploadPhoto = document.querySelector('#btnUploadPhoto');
@@ -124,6 +136,7 @@ function updateAvatarDisplay() {
 
     const curFiles = avatarInput.files;
     if (!curFiles.length) {
+        authorPhotoPreview.removeAttribute('style');
         avatarPreview.removeAttribute('style');
         btnUploadPhoto.classList.remove('hide');
         btnUploadPhotoNew.classList.add('hide');
@@ -140,6 +153,9 @@ function updateAvatarDisplay() {
         btnUploadPhotoNew.classList.remove('hide');
         btnRemovePhoto.classList.remove('hide');
     }
+    if (checkError) {
+        checkEmptyField('photoField');
+    }
 }
 
 function removeAvatar() {
@@ -151,7 +167,7 @@ function removeAvatar() {
     updateAvatarDisplay();
 }
 
-function updateImageHDDisplay() {
+function updateImageHDDisplay(checkError = true) {
     const imageHDPreview = document.querySelector('#imageHDPreview');
     const imageHDInput = document.querySelector('#imageHDInput');
     const btnUploadImageHD = document.querySelector('#btnUploadImageHD');
@@ -181,6 +197,9 @@ function updateImageHDDisplay() {
         btnRemoveImageHD.classList.remove('unvisible');
         imageHDFormats.classList.add('hide');
     }
+    if (checkError) {
+        checkEmptyField('imageHDInput');
+    }
 }
 
 function removeImageHD() {
@@ -193,23 +212,20 @@ function removeImageHD() {
     updateImageHDDisplay();
 }
 
-function updateImageSDDisplay() {
+function updateImageSDDisplay(checkError = true) {
     const imageSDPreview = document.querySelector('#imageSDPreview');
     const imageSDInput = document.querySelector('#imageSDInput');
-    const btnUploadImageSD = document.querySelector('#btnUploadImageSD');
-    const btnUploadImageSDNew = document.querySelector('#btnUploadImageSDNew');
-    const btnRemoveImageSD = document.querySelector('#btnRemoveImageSD');
-    const imageSDFormats = document.querySelector('#imageSDFormats');
     const postImagePreview = document.querySelector('#postImagePreview');
 
     const curFiles = imageSDInput.files;
     if (!curFiles.length) {
         imageSDPreview.removeAttribute('style');
         postImagePreview.removeAttribute('style');
-        btnUploadImageSD.classList.remove('hide');
-        btnUploadImageSDNew.classList.add('unvisible');
-        btnRemoveImageSD.classList.add('unvisible');
-        imageSDFormats.classList.remove('hide');
+
+        controlElementClass('btnUploadImageSD', 'hide', false);
+        controlElementClass('btnUploadImageSDNew', 'unvisible', true);
+        controlElementClass('btnRemoveImageSD', 'unvisible', true);
+        controlElementClass('imageSDFormats', 'hide', false);
     } else {
         const uploadedFile = curFiles[0];
 
@@ -218,10 +234,13 @@ function updateImageSDDisplay() {
         reader.object_preview = [imageSDPreview, postImagePreview];
         reader.readAsDataURL(uploadedFile);
 
-        btnUploadImageSD.classList.add('hide');
-        btnUploadImageSDNew.classList.remove('unvisible');
-        btnRemoveImageSD.classList.remove('unvisible');
-        imageSDFormats.classList.add('hide');
+        controlElementClass('btnUploadImageSD', 'hide', true);
+        controlElementClass('btnUploadImageSDNew', 'unvisible', false);
+        controlElementClass('btnRemoveImageSD', 'unvisible', false);
+        controlElementClass('imageSDFormats', 'hide', true);
+    }
+    if(checkError) {
+        checkEmptyField('imageSDInput');
     }
 }
 
@@ -238,6 +257,58 @@ function removeBase64Header(str) {
     return str 
         ? str.substring(str.indexOf(',') + 1) 
         : "";
+}
+
+function validateForm() {
+    var result = true;
+    const fields = ['titleField', 'descrField', 'nameField', 'photoField', 
+                    'dateField', 'imageHDInput', 'imageSDInput', 'contentText'];
+
+    fields.forEach((id) => {
+        result = checkEmptyField(id) && result;
+    })
+    
+    return result;
+}
+
+function checkEmptyField(fieldId) {
+    const field = document.getElementById(fieldId);
+    const error = field.parentElement.querySelector('.input-wrap__error-text');
+    if (!field.value) {
+        error.classList.remove('hide');
+        if (field.type === 'text') {
+            field.classList.add('input-wrap__field_error');
+        }
+        if (field.type === 'textarea') {
+            field.classList.add('content__text_error');
+        }
+
+        return false;
+    } else {
+        error.classList.add('hide');
+        if (field.type === 'text') {
+            field.classList.remove('input-wrap__field_error');
+        }
+        if (field.type === 'textarea') {
+            field.classList.remove('content__text_error');
+        }
+    }
+
+    return true;
+}
+
+function showMessage (isSuccess) {
+    controlElementClass('messageDanger', 'publish-form__message_show', !isSuccess);
+    controlElementClass('messageSuccess', 'publish-form__message_show', isSuccess);
+}
+
+function controlElementClass(elementId, className, isPresent) {
+    const element = document.querySelector('#' + elementId);
+    if (isPresent) {
+        element.classList.add(className);
+    } else {
+        element.classList.remove(className);
+    }
 }
 
 async function submitHandler(event) {
@@ -259,14 +330,60 @@ async function submitHandler(event) {
     object.image_hd = removeBase64Header(object.image_hd);
     object.image_sd = removeBase64Header(object.image_sd);
 
-    const json = JSON.stringify(object);
+    if (validateForm()) {
+        const response = await fetch('/api/post', {
+            method: 'POST',
+            body: JSON.stringify(object),
+        })
+    
+        if (response.ok) {
+            setFormAccessMode(false);
+            showMessage(true);
+            offerNewPost();
+        }
+    } else {
+        showMessage(false);
+    }
+}
 
-    const response = await fetch('post', {
-        method: 'POST',
-        body: json,
-    })
+function offerNewPost() {
+    const submitBtn = document.querySelector('#submit');
+    submitBtn.removeEventListener('click', submitHandler);
+    submitBtn.addEventListener('click', resetForm);
+    submitBtn.value = "Next Post";
+    submitBtn.classList.add('button_green');
+}
 
-    if (response.ok) {
-        // console.log(json);
+function resetForm(event) {
+    event.preventDefault();
+
+    const submitBtn = document.querySelector('#submit');
+    submitBtn.removeEventListener('click', resetForm);
+   
+    const form = document.querySelector('#form');
+    form.reset();
+    titleChangeHandler();
+    descrChangeHandler();
+    nameChangeHandler();
+    updateAvatarDisplay(false);
+    updateImageHDDisplay(false);
+    updateImageSDDisplay(false);
+
+    submitBtn.addEventListener('click', submitHandler);
+    submitBtn.classList.remove('button_green');
+    submitBtn.value = "Publish";
+    controlElementClass('messageSuccess', 'publish-form__message_show', false);
+    setFormAccessMode(true);
+}
+
+function setFormAccessMode(isEnable = true) {
+    const mainInfo = document.getElementsByClassName('main-info');
+    const content = document.getElementsByClassName('content');
+    if (isEnable) {
+        mainInfo[0].classList.remove('events-off');
+        content[0].classList.remove('events-off');
+    } else {
+        mainInfo[0].classList.add('events-off');
+        content[0].classList.add('events-off');
     }
 }

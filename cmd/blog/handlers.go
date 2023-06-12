@@ -140,11 +140,11 @@ func post(db *sqlx.DB) func(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		ts, err := template.ParseFiles("pages/post.html") // Главная страница блога
+		ts, err := template.ParseFiles("pages/post.html")
 		if err != nil {
-			http.Error(w, "Internal Server Error", 500) // В случае ошибки парсинга - возвращаем 500
-			log.Println(err.Error())                    // Используем стандартный логгер для вывода ошибки в консоль
-			return                                      // Не забываем завершить выполнение ф-ии
+			http.Error(w, "Internal Server Error", 500)
+			log.Println(err.Error())
+			return
 		}
 
 		data := postPageData{
@@ -154,7 +154,7 @@ func post(db *sqlx.DB) func(w http.ResponseWriter, r *http.Request) {
 			Texts:          strings.Split(post.Content, "\n"),
 		}
 
-		err = ts.Execute(w, data) // Запускаем шаблонизатор для вывода шаблона в тело ответа
+		err = ts.Execute(w, data)
 		if err != nil {
 			http.Error(w, "Internal Server Error", 500)
 			log.Println(err.Error())
@@ -268,16 +268,16 @@ func createPost(db *sqlx.DB) func(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		// log.Println(req)
+		var postUrl string
 
-		err = savePost(db, req)
+		postUrl, err = savePost(db, req)
 		if err != nil {
 			http.Error(w, "Internal Server Error", 500)
 			log.Println(err.Error())
 			return
 		}
 
-		log.Println("new post created successfully")
+		log.Println("successfully created new post with url: /post/" + postUrl)
 	}
 }
 
@@ -285,7 +285,7 @@ func checkEmptyField(data postDataRequest) bool {
 	return (data.Title == "" || data.Description == "" || data.Author_name == "" || data.Publish_date == "" || data.Content == "" || data.Author_photo_name == "" || data.Author_photo == "" || data.Image_hd_name == "" || data.Image_hd == "" || data.Image_sd_name == "" || data.Image_sd == "")
 }
 
-func savePost(db *sqlx.DB, req postDataRequest) error {
+func savePost(db *sqlx.DB, req postDataRequest) (string, error) {
 	const query = `
 		INSERT INTO
 			` + "`post`" + `
@@ -317,6 +317,8 @@ func savePost(db *sqlx.DB, req postDataRequest) error {
 	encodeAndSaveImage(req.Image_hd, "static/img/", req.Image_hd_name)
 	encodeAndSaveImage(req.Image_sd, "static/img/", req.Image_sd_name)
 
+	postUrl := uuid.New().String()
+
 	_, err := db.Exec(query,
 		req.Title,
 		req.Description,
@@ -326,9 +328,9 @@ func savePost(db *sqlx.DB, req postDataRequest) error {
 		"static/img/"+req.Author_photo_name,
 		"static/img/"+req.Image_hd_name,
 		"static/img/"+req.Image_sd_name,
-		uuid.New().String(),
+		postUrl,
 	)
-	return err
+	return postUrl, err
 }
 
 func encodeAndSaveImage(encodedFile string, savePath string, fileName string) error {
