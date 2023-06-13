@@ -35,7 +35,6 @@ type indexPageData struct {
 	MostRecentPosts []*postData
 	TitleSubscribe  string
 }
-
 type postData struct {
 	Id          string `db:"id"`
 	Url         string `db:"url"`
@@ -51,7 +50,6 @@ type postData struct {
 	Content     string `db:"content"`
 	PostURL     string
 }
-
 type postDataRequest struct {
 	Title             string `json:"title"`
 	Description       string `json:"description"`
@@ -65,7 +63,6 @@ type postDataRequest struct {
 	Image_sd_name     string `json:"image_sd_name"`
 	Image_sd          string `json:"image_sd"`
 }
-
 type postPageData struct {
 	ResourceName   string
 	PostRow        postData
@@ -73,6 +70,10 @@ type postPageData struct {
 	Texts          []string
 }
 type adminPageData struct {
+	ResourceName string
+	Title        string
+}
+type loginPageData struct {
 	ResourceName string
 	Title        string
 }
@@ -190,6 +191,31 @@ func admin(db *sqlx.DB) func(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func login(db *sqlx.DB) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		ts, err := template.ParseFiles("pages/login.html")
+		if err != nil {
+			http.Error(w, "Internal Server Error", 500)
+			log.Println(err.Error())
+			return
+		}
+
+		data := loginPageData{
+			ResourceName: "Escape.",
+			Title:        "Log In",
+		}
+
+		err = ts.Execute(w, data) // Запускаем шаблонизатор для вывода шаблона в тело ответа
+		if err != nil {
+			http.Error(w, "Internal Server Error", 500)
+			log.Println(err.Error())
+			return
+		}
+
+		log.Println("login page loaded successfully")
+	}
+}
+
 func getPosts(db *sqlx.DB, featured int) ([]*postData, error) {
 	const query = `
 		SELECT
@@ -277,6 +303,8 @@ func createPost(db *sqlx.DB) func(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
+		// http.ResponseWriter
+
 		log.Println("successfully created new post with url: /post/" + postUrl)
 	}
 }
@@ -287,8 +315,7 @@ func checkEmptyField(data postDataRequest) bool {
 
 func savePost(db *sqlx.DB, req postDataRequest) (string, error) {
 	const query = `
-		INSERT INTO
-			` + "`post`" + `
+		INSERT INTO post
 		(
 			title,
 			subtitle,

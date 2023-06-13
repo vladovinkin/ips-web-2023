@@ -277,6 +277,7 @@ function checkEmptyField(fieldId) {
     if (!field.value) {
         error.classList.remove('hide');
         if (field.type === 'text') {
+            field.classList.remove('input-wrap__field_filled');
             field.classList.add('input-wrap__field_error');
         }
         if (field.type === 'textarea') {
@@ -288,6 +289,7 @@ function checkEmptyField(fieldId) {
         error.classList.add('hide');
         if (field.type === 'text') {
             field.classList.remove('input-wrap__field_error');
+            field.classList.add('input-wrap__field_filled');
         }
         if (field.type === 'textarea') {
             field.classList.remove('content__text_error');

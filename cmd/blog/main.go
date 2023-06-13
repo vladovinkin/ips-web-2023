@@ -27,6 +27,7 @@ func main() {
 	mux := mux.NewRouter()
 	mux.HandleFunc("/home", index(dbx))
 	mux.HandleFunc("/admin", admin(dbx))
+	mux.HandleFunc("/login", login(dbx))
 	mux.HandleFunc("/post/{postURL}", post(dbx))
 
 	mux.HandleFunc("/api/post", createPost(dbx)).Methods(http.MethodPost)
