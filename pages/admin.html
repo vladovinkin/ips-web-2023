@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/static/css/style.css">
+  <title>{{ .ResourceName }} {{ .Title }}</title>
+</head>
+<body>
+  <div class="container-wrap">
+    <div class="container">
+      <div class="header header_admin">
+        <div class="header__logo-group">
+          <a href="/home" class="logo logo_theme_dark" title="Main page">{{ .ResourceName }}</a>
+          <div class="header__author">author</div>
+        </div>
+        <div class="header__menu">
+          <div class="header__avatar avatar">
+            <div class="avatar__initial" title="Profile">N</div>
+          </div>
+          <div class="header__logout-button">
+            <div class="logout-button" title="Log Out"></div>
+          </div>
+        </div>
+      </div>
+
+      <form action="/" id="form" class="publish-form">
+        <div class="publish-form__header">
+          <div class="publish-form__title title-wrap">
+            <div class="title-wrap__title">New Post</div>
+            <div class="title-wrap__subtitle">Fill out the form bellow and publish your article</div>
+          </div>
+          <input type="submit" id="submit" class="publish-form__button button_orange" value="Publish">
+        </div>
+        <div id="messageSuccess" class="publish-form__message publish-form__message_success">
+          <div class="message">
+            <div class="message__icon"></div>
+            <div class="message__text">Publish Complete!</div>
+          </div>
+        </div>
+        <div id="messageDanger" class="publish-form__message publish-form__message_danger">
+          <div class="message">
+            <div class="message__icon"></div>
+            <div class="message__text">Whoops! Some fields need your attention :o</div>
+          </div>
+        </div>
+
+        <div class="main-info">
+          <div class="main-info__title title-form-section">Main Information</div>
+          <div class="main-info__columns-wrapper">
+            <div class="column-inputs">
+
+              <div class="input-wrap">
+                <label for="titleField" class="input-wrap__label">Title</label>
+                <input id="titleField" class="input-wrap__field" type="text" placeholder="New Post">
+                <div class="input-wrap__error-text hide">Title is required.</div>
+              </div>
+
+              <div class="input-wrap">
+                <label for="descrField" class="input-wrap__label">Short description</label>
+                <input id="descrField" class="input-wrap__field" type="text" placeholder="Please, enter any description">
+                <div class="input-wrap__error-text hide">Short description is required.</div>
+              </div>
+              
+              <div class="input-wrap">
+                <label for="nameField" class="input-wrap__label">Author name</label>
+                <input id="nameField" class="input-wrap__field" type="text" placeholder="Please, enter author name">
+                <div class="input-wrap__error-text hide">Author name is required.</div>
+              </div>
+
+              <div class="input-wrap">
+                <div class="input-wrap__label">Author Photo</div>
+                <input id="photoField" class="column-inputs__photo" type="file" accept=".jpg, .jpeg, .png">
+                <div class="column-inputs__photo-wrapper">
+                  <div class="column-inputs__photo-preview"></div>
+                  <label for="photoField" id="btnUploadPhoto" class="control-button__text" title="Upload photo">Upload</label>
+                  <label for="photoField" id="btnUploadPhotoNew" class="control-button hide" title="Upload new photo">
+                    <div class="control-button__icon control-icon_upload"></div>
+                    <div class="control-button__text">Upload New</div>
+                  </label>
+                  <div class="control-button control-button_remove hide" id="btnRemovePhoto">
+                    <div class="control-button__icon control-icon_remove"></div>
+                    <div class="control-button__text control-button__text_remove">Remove</div>
+                  </div>
+                </div>
+                <div class="input-wrap__error-text hide">Author photo is required.</div>
+              </div>
+            
+              <div class="input-wrap">
+                <label for="dateField" class="input-wrap__label">Publish Date</label>
+                <input type="date" id="dateField" class="input-wrap__field input-date input-wrap__field_filled">
+                <div class="input-wrap__error-text hide">Date is incorrect.</div>
+              </div>
+
+              <div class="column-inputs__image-HD imageHD-input input-wrap">
+                <div class="imageHD-input__label input-wrap__label">Hero Image</div>
+                <input id="imageHDInput" class="column-inputs__photo" type="file" accept=".gif, .jpeg, .png">
+                <div class="imageHD-input__box" id="imageHDPreview">
+                  <label id="btnUploadImageHD" for="imageHDInput" class="control-button" title="Upload photo">
+                    <div class="control-button__icon control-icon_upload"></div>
+                    <div class="control-button__text">Upload</div>
+                  </label>
+                </div>
+                <div class="imageHD-input__footer image-upload-footer">
+                  <div id="imageHDFormats" class="image-upload-footer__text">Size up to 10mb. Format: png, jpeg, gif.</div>
+                  <label for="imageHDInput" id="btnUploadImageHDNew" class="control-button unvisible" title="Upload new image">
+                    <div class="control-button__icon control-icon_upload"></div>
+                    <div class="control-button__text">Upload New</div>
+                  </label>
+                  <div id="btnRemoveImageHD" class="control-button control-button_remove unvisible">
+                    <div class="control-button__icon control-icon_remove"></div>
+                    <div class="control-button__text control-button__text_remove">Remove</div>
+                  </div>
+                </div>
+                <div class="input-wrap__error-text no-margin hide">Hero image is required.</div>
+              </div>
+              
+              <div class="column-inputs__image-SD imageSD-input input-wrap no-margin">
+                <div class="imageSD-input__label input-wrap__label">Hero Image</div>
+                <input id="imageSDInput" class="column-inputs__photo" type="file" accept=".gif, .jpeg, .png">
+                <div class="imageSD-input__box" id="imageSDPreview">
+                  <label id="btnUploadImageSD" for="imageSDInput" class="control-button" title="Upload photo">
+                    <div class="control-button__icon control-icon_upload"></div>
+                    <div class="control-button__text">Upload</div>
+                  </label>
+                </div>
+                <div class="imageSD-input__footer image-upload-footer">
+                  <div id="imageSDFormats" class="image-upload-footer__text">Size up to 5mb. Format: png, jpeg, gif.</div>
+                  <label for="imageSDInput" id="btnUploadImageSDNew" class="control-button unvisible" title="Upload new image">
+                    <div class="control-button__icon control-icon_upload"></div>
+                    <div class="control-button__text">Upload New</div>
+                  </label>
+                  <div id="btnRemoveImageSD" class="control-button control-button_remove unvisible">
+                    <div class="control-button__icon control-icon_remove"></div>
+                    <div class="control-button__text control-button__text_remove">Remove</div>
+                  </div>
+                </div>
+                <div class="input-wrap__error-text no-margin hide">Hero image is required.</div>
+              </div>
+
+            </div>
+  
+            <div class="column-preview">
+              <div class="column-preview__title">Article preview</div>
+              <div class="preview-article">
+                <div id="articleTitlePreview" class="preview-article__title">New Post</div>
+                <div id="articleDescrPreview" class="preview-article__descr">Please, enter any description</div>
+                <div id="articleImagePreview" class="preview-article__photo"></div>
+                <div class="gradient-horiz gradient-horiz__article"></div>
+                <div class="gradient-vert"></div>
+              </div>
+              
+              <div class="column-preview__title">Post card preview</div>
+              <div class="preview-post">
+                <div id="postImagePreview" class="preview-post__photo"></div>
+                <div class="preview-post__header post-header">
+                  <div id="postTitlePreview" class="post-header__title">New Post</div>
+                  <div id="postDescrPreview" class="post-header__description">Please, enter any description</div>
+                </div>
+                <div class="preview-post__signature post-signature">
+                  <div class="post-signature__author signature-author">
+                    <div id="authorPhotoPreview" class="signature-author__photo"></div>
+                    <div id="authorNamePreview" class="signature-author__name signature-author__name_dark signature-author__name_upload">Enter author name</div>
+                  </div>
+                  <div id="postDatePreview" class="data-signature__date">Date</div>
+                </div>
+                <div class="gradient-horiz gradient-horiz__post"></div>
+                <div class="gradient-vert"></div>
+              </div>
+
+            </div>
+  
+          </div>
+        </div>
+  
+        <div class="content">
+          <div class="content__title title-form-section">Content</div>
+          <label class="content__label" for="contentText">Post content (plain text)</label>
+          <textarea class="content__text" name="content" id="contentText" cols="30" rows="10" placeholder="Type anything you want ..."></textarea>
+          <div class="input-wrap__error-text hide">Content is required.</div>
+        </div>
+      </form>
+
+
+    </div>
+  </div>
+  <script type="text/javascript" src="/static/js/admin.js"></script>
+</body>
+</html>
