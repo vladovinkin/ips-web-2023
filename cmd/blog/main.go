@@ -32,7 +32,6 @@ func main() {
 
 	mux.HandleFunc("/api/post", createPost(dbx)).Methods(http.MethodPost)
 
-	// Отдача статического контента из папки static
 	mux.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
 
 	fmt.Println("Start server")

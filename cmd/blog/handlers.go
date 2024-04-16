@@ -180,7 +180,7 @@ func admin(db *sqlx.DB) func(w http.ResponseWriter, r *http.Request) {
 			Title:        "Admin page",
 		}
 
-		err = ts.Execute(w, data) // Запускаем шаблонизатор для вывода шаблона в тело ответа
+		err = ts.Execute(w, data)
 		if err != nil {
 			http.Error(w, "Internal Server Error", 500)
 			log.Println(err.Error())
@@ -205,7 +205,7 @@ func login(db *sqlx.DB) func(w http.ResponseWriter, r *http.Request) {
 			Title:        "Log In",
 		}
 
-		err = ts.Execute(w, data) // Запускаем шаблонизатор для вывода шаблона в тело ответа
+		err = ts.Execute(w, data)
 		if err != nil {
 			http.Error(w, "Internal Server Error", 500)
 			log.Println(err.Error())
@@ -242,10 +242,8 @@ func getPosts(db *sqlx.DB, featured int) ([]*postData, error) {
 	}
 
 	for _, post := range posts {
-		post.PostURL = "/post/" + post.Url // Формируем исходя из url поста в базе
+		post.PostURL = "/post/" + post.Url
 	}
-
-	// fmt.Println(posts)
 
 	return posts, nil
 }
